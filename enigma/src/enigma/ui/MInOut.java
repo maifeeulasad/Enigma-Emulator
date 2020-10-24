@@ -57,9 +57,10 @@ public class MInOut extends JTextField implements DocumentListener {
         }
          */
         if(onChangeListener!=null){
-            onChangeListener.onChange(getText());
             if(id!=0){
                 onChangeListener.onChange(getText(),id);
+            }else{
+                onChangeListener.onChange(getText());
             }
         }
     }
@@ -79,9 +80,10 @@ public class MInOut extends JTextField implements DocumentListener {
         }
          */
         if(onChangeListener!=null){
-            onChangeListener.onChange(getText());
             if(id!=0){
                 onChangeListener.onChange(getText(),id);
+            }else{
+                onChangeListener.onChange(getText());
             }
         }
     }
@@ -101,9 +103,10 @@ public class MInOut extends JTextField implements DocumentListener {
         }
          */
         if(onChangeListener!=null){
-            onChangeListener.onChange(getText());
             if(id!=0){
                 onChangeListener.onChange(getText(),id);
+            }else{
+                onChangeListener.onChange(getText());
             }
         }
     }

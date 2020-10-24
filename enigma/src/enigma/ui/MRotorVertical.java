@@ -29,6 +29,12 @@ public class MRotorVertical extends JTextArea {
                 +" ".repeat(Math.max(ROTAR_SIZE-arrowPosition-1,0)));
     }
 
+    public void setArrowPosition(int arrowPosition){
+        setRotorText(" ".repeat(Math.max(arrowPosition-1,0))
+                + ARROW_SIGN
+                +" ".repeat(Math.max(ROTAR_SIZE-arrowPosition-1,0)));
+    }
+
     public void setRotorText(String text){
         setText(String.join("\n",text.split("")));
     }

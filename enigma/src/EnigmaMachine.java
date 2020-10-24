@@ -14,7 +14,7 @@ public class EnigmaMachine {
             "FKQHTLXOCBJSPDZRAMEWNIUYGV");
 
     private static final int[][] arrowCombination = {
-            {1,2,4,6,7,9,2,4},
+            {1,20,4,6,7,9,2,4},
             {1,2,4,16,7,9,20,24},
             {2,18,4,26,17,9,20,14},
             {1,19,4,3,7,9,20,3},
