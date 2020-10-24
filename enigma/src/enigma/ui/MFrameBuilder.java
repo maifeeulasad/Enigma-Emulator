@@ -34,6 +34,7 @@ public class MFrameBuilder implements OnChangeListener, ActionListener {
     JPanel emulationPanel;
 
     MRotors mRotors;
+    MInOut output;
 
     public MFrameBuilder() {
         enigma = Enigma.getEnigma();
@@ -84,7 +85,8 @@ public class MFrameBuilder implements OnChangeListener, ActionListener {
         inputPanel.add(new JLabel("Input : "));
         inputPanel.add(new MInOut(true, this));
         inputPanel.add(new JLabel("Output : "));
-        inputPanel.add(new MInOut(false));
+        output = new MInOut(false);
+        inputPanel.add(output);
         for (int i = 0; i < 6; i++) {
             inputPanel.add(new JLabel("R" + (i + 1) + " : "));
             inputPanel.add(new MInOut(true, this, i + 1));
@@ -171,7 +173,7 @@ public class MFrameBuilder implements OnChangeListener, ActionListener {
         if (text == null || text.equals("") || text.equals("\n"))
             return;
         char x = mRotors.setInputChar(text.charAt(text.length() - 1));
-        System.out.println(x);
+        output.setText(output.getText()+x);
     }
 
     @Override

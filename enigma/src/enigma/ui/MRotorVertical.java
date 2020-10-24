@@ -52,10 +52,10 @@ public class MRotorVertical extends JTextArea {
         toReflector %= ROTAR_SIZE+1;
         StringBuilder builder = new StringBuilder(" ".repeat(ROTAR_SIZE));
         if(fromReflector != toReflector){
-            builder.setCharAt(toReflector-1,TO_REFLECTOR);
-            builder.setCharAt(fromReflector-1,FROM_REFLECTOR);
+            builder.setCharAt(Math.max(toReflector-1,0),TO_REFLECTOR);
+            builder.setCharAt(Math.max(fromReflector-1,0),FROM_REFLECTOR);
         }else{
-            builder.setCharAt(fromReflector-1,OVERLAP);
+            builder.setCharAt(Math.max(fromReflector-1,0),OVERLAP);
         }
         return builder.toString();
     }

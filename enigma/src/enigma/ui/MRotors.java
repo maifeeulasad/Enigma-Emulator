@@ -3,10 +3,8 @@ package enigma.ui;
 import enigma.core.Enigma;
 
 import javax.swing.*;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.MatchResult;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class MRotors {
 
@@ -42,8 +40,11 @@ public class MRotors {
     }
 
     public char setInputChar(char inputChar) {
+        System.out.println("input : " + inputChar);
         calculateArrow();
-        return calculateEncodedChar(inputChar);
+        char x = calculateEncodedChar(inputChar);
+        System.out.println("output : " + x);
+        return x;
     }
 
     public JPanel addAll(JPanel parent) {
@@ -82,6 +83,11 @@ public class MRotors {
         }
         reflector.setRotorText(enigma.reflector);
         for (int i = 0; i < ARROW_COUNT; i++) {
+            enigma.arrowPositions[i] %= 26;
+            if (enigma.arrowPositions[i] == 0)
+                enigma.arrowPositions[i] = 26;
+            if (enigma.arrowPositions[i] < 0)
+                enigma.arrowPositions[i] += 26;
             arrow[i].setArrowPosition(enigma.arrowPositions[i]);
         }
     }
@@ -107,7 +113,10 @@ public class MRotors {
         }
         for (int i = 0; i < ARROW_COUNT; i++) {
             enigma.arrowPositions[i] %= 26;
-            enigma.arrowPositions[i]++;
+            if (enigma.arrowPositions[i] == 0)
+                enigma.arrowPositions[i] = 26;
+            if (enigma.arrowPositions[i] < 0)
+                enigma.arrowPositions[i] += 26;
             arrow[i].setArrowPosition(enigma.arrowPositions[i]);
             arrow[i].revalidate();
             arrow[i].repaint();
@@ -128,14 +137,10 @@ public class MRotors {
         char rotor5char = enigma.rotors[4].charAt(enigma.rotor4index - 1);
         enigma.rotor6index = enigma.rotors[5].indexOf(rotor5char) + 1;
         enigma.reflectorInIndex = enigma.rotor6index;
-        char reflectorChar = enigma.reflector.charAt(enigma.reflectorInIndex);
-        List<Integer> indices = Pattern.compile(Pattern.quote(String.valueOf(reflectorChar)))
-                .matcher(enigma.reflector)
-                .results()
-                .map(MatchResult::start)
-                .collect(Collectors.toList());
-        indices.remove((Integer) enigma.reflectorInIndex);
-        enigma.reflectorOutIndex = indices.get(0) + 2;
+        char reflectorChar = enigma.reflector.charAt(enigma.reflectorInIndex - 1);
+        List<Integer> indices = findWord(enigma.reflector, String.valueOf(reflectorChar));
+        indices.remove((Integer) (enigma.reflectorInIndex - 1));
+        enigma.reflectorOutIndex = indices.get(0) + 1;
         char rotor6char = enigma.rotors[5].charAt(enigma.reflectorOutIndex - 1);
         enigma.rotor5index = enigma.rotors[4].indexOf(rotor6char) + 1;
         char rotor4char = enigma.rotors[3].charAt(enigma.rotor5index - 1);
@@ -144,14 +149,60 @@ public class MRotors {
         enigma.rotor1index = enigma.rotors[0].indexOf(rotor2char) + 1;
         enigma.outputIndex = enigma.rotor1index;
 
-        enigma.outputIndex = enigma.outputIndex % 26;
-        enigma.inputIndex = enigma.inputIndex % 26;
-        enigma.rotor2index = enigma.rotor2index % 26;
-        enigma.rotor4index = enigma.rotor4index % 26;
-        enigma.rotor6index = enigma.rotor6index % 26;
-        enigma.rotor3index = enigma.rotor3index % 26;
-        enigma.rotor5index = enigma.rotor5index % 26;
-        enigma.reflectorOutIndex = enigma.reflectorOutIndex % 26;
+        enigma.outputIndex %= 26;
+        enigma.inputIndex %= 26;
+        enigma.rotor1index %= 26;
+        enigma.rotor2index %= 26;
+        enigma.rotor3index %= 26;
+        enigma.rotor4index %= 26;
+        enigma.rotor5index %= 26;
+        enigma.rotor6index %= 26;
+        enigma.reflectorOutIndex %= 26;
+        enigma.reflectorInIndex %= 26;
+
+        if (enigma.outputIndex == 0)
+            enigma.outputIndex = 26;
+        if (enigma.inputIndex == 0)
+            enigma.inputIndex = 26;
+        if (enigma.reflectorOutIndex == 0)
+            enigma.reflectorOutIndex = 26;
+        if (enigma.reflectorInIndex == 0)
+            enigma.reflectorInIndex = 26;
+        if (enigma.rotor1index == 0)
+            enigma.rotor1index = 26;
+        if (enigma.rotor2index == 0)
+            enigma.rotor2index = 26;
+        if (enigma.rotor3index == 0)
+            enigma.rotor3index = 26;
+        if (enigma.rotor4index == 0)
+            enigma.rotor4index = 26;
+        if (enigma.rotor5index == 0)
+            enigma.rotor5index = 26;
+        if (enigma.rotor6index == 0)
+            enigma.rotor6index = 26;
+
+
+
+        if (enigma.outputIndex < 0)
+            enigma.outputIndex =+ 26;
+        if (enigma.inputIndex < 0)
+            enigma.inputIndex =+ 26;
+        if (enigma.reflectorOutIndex < 0)
+            enigma.reflectorOutIndex =+ 26;
+        if (enigma.reflectorInIndex < 0)
+            enigma.reflectorInIndex =+ 26;
+        if (enigma.rotor1index < 0)
+            enigma.rotor1index =+ 26;
+        if (enigma.rotor2index < 0)
+            enigma.rotor2index =+ 26;
+        if (enigma.rotor3index < 0)
+            enigma.rotor3index =+ 26;
+        if (enigma.rotor4index < 0)
+            enigma.rotor4index =+ 26;
+        if (enigma.rotor5index < 0)
+            enigma.rotor5index =+ 26;
+        if (enigma.rotor6index < 0)
+            enigma.rotor6index =+ 26;
 
         direction[0].setRotorPosition(enigma.outputIndex, enigma.inputIndex);
         direction[1].setRotorPosition(enigma.rotor3index, enigma.rotor2index);
@@ -163,11 +214,27 @@ public class MRotors {
             direction[i].repaint();
         }
 
-        return enigma.rotors[0].charAt(enigma.outputIndex);
+        return INPUT.charAt(Math.max(enigma.outputIndex - 1, 0));
     }
 
     String stringRotate(String x) {
         return x.substring(1) + x.charAt(0);
+    }
+
+    public List<Integer> findWord(String textString, String word) {
+        List<Integer> indexes = new ArrayList<Integer>();
+        String lowerCaseTextString = textString.toLowerCase();
+        String lowerCaseWord = word.toLowerCase();
+
+        int index = 0;
+        while (index != -1) {
+            index = lowerCaseTextString.indexOf(lowerCaseWord, index);
+            if (index != -1) {
+                indexes.add(index);
+                index++;
+            }
+        }
+        return indexes;
     }
 
 }

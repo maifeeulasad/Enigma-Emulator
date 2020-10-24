@@ -5,6 +5,7 @@ import enigma.core.OnChangeListener;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import java.awt.*;
 
 public class MInOut extends JTextField implements DocumentListener {
 
@@ -16,7 +17,10 @@ public class MInOut extends JTextField implements DocumentListener {
     private int id;
 
     public MInOut(boolean in,OnChangeListener onChangeListener,int id,int columns){
-        super();
+        this(in, onChangeListener, id,columns,"");
+    }
+    public MInOut(boolean in,OnChangeListener onChangeListener,int id,int columns,String text){
+        super(text);
         if(columns==0)
             setColumns(id==0 ? 8 : 1);
         else
@@ -24,6 +28,7 @@ public class MInOut extends JTextField implements DocumentListener {
         if(!in){
             setEnabled(false);
             setEditable(false);
+            setDisabledTextColor(Color.BLUE);
         }
         this.onChangeListener = onChangeListener;
         this.id = id;
@@ -32,6 +37,10 @@ public class MInOut extends JTextField implements DocumentListener {
 
     public MInOut(boolean in,OnChangeListener onChangeListener,int id){
         this(in, onChangeListener,id,0);
+    }
+
+    public MInOut(boolean in,OnChangeListener onChangeListener,int id,String text){
+        this(in, onChangeListener,id,0,text);
     }
 
     public MInOut(boolean in,OnChangeListener onChangeListener){
