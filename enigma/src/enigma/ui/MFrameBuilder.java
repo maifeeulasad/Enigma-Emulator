@@ -1,5 +1,6 @@
 package enigma.ui;
 
+import enigma.core.Enigma;
 import enigma.core.OnChangeListener;
 
 import javax.swing.*;
@@ -12,9 +13,15 @@ import java.util.List;
 
 public class MFrameBuilder implements OnChangeListener, ActionListener {
 
+    Enigma enigma;
+
     MFrame mFrame;
+    List<Integer> rotorIds = new ArrayList<>();
     List<String> rotors = new ArrayList<>();
     List<String> reflectors = new ArrayList<>();
+    int[][] arrowCombination;
+    String initialPermutation;
+
     JPanel parentPanel;
     JPanel availableParent;
     JPanel availableRotorsPanel;
@@ -23,7 +30,11 @@ public class MFrameBuilder implements OnChangeListener, ActionListener {
     JPanel inputPanel;
     JPanel emulationPanel;
 
+    MRotors mRotors;
+
     public MFrameBuilder(){
+        enigma = Enigma.getEnigma();
+
         mFrame=new MFrame();
         mFrame.setSize(800,600);
 
@@ -47,6 +58,8 @@ public class MFrameBuilder implements OnChangeListener, ActionListener {
         availableParent.setLayout(new BoxLayout(availableParent,BoxLayout.X_AXIS));
         availableParent.add(availableRotorsPanel);
         availableParent.add(availableReflectorsPanel);
+
+        mRotors = new MRotors(enigma);
 
         rotorsAndReflectorsPanel = new JPanel();
         String rotorsPanelTitle = "Set your rotors below : ";
@@ -88,14 +101,14 @@ public class MFrameBuilder implements OnChangeListener, ActionListener {
         return this;
     }
 
-    public MFrameBuilder addRotors(List<String> rotorsTexts){
+    public MFrameBuilder setRotors(List<String> rotorsTexts){
         for(String rotorsText:rotorsTexts){
             this.addRotor(rotorsText);
         }
         return this;
     }
 
-    public MFrameBuilder addReflectors(List<String> reflectorsTexts){
+    public MFrameBuilder setReflectors(List<String> reflectorsTexts){
         for(String reflectorText:reflectorsTexts){
             this.addReflector(reflectorText);
         }
@@ -118,26 +131,22 @@ public class MFrameBuilder implements OnChangeListener, ActionListener {
         return this;
     }
 
+    public MFrameBuilder setArrowCombination(int[][] arrowCombination){
+        this.arrowCombination = arrowCombination;
+        return this;
+    }
+
     public MFrameBuilder setFullScreen(){
         mFrame.setFullScreen();
         return this;
     }
 
     public void build(){
+        //enigma = Enigma.setEnigma();
+
         mFrame.add(parentPanel);
 
-        rotorsAndReflectorsPanel.add(new MRotorVertical(reflectors.get(0)));
-        rotorsAndReflectorsPanel.add(new MRotorVertical(10,3));
-        rotorsAndReflectorsPanel.add(new MRotorVertical(rotors.get(0)));
-        rotorsAndReflectorsPanel.add(new MRotorVertical(rotors.get(1)));
-        rotorsAndReflectorsPanel.add(new MRotorVertical(10,11));
-        rotorsAndReflectorsPanel.add(new MRotorVertical(rotors.get(2)));
-        rotorsAndReflectorsPanel.add(new MRotorVertical(rotors.get(3)));
-        rotorsAndReflectorsPanel.add(new MRotorVertical(20,11));
-        rotorsAndReflectorsPanel.add(new MRotorVertical(rotors.get(4)));
-        rotorsAndReflectorsPanel.add(new MRotorVertical(rotors.get(5)));
-        rotorsAndReflectorsPanel.add(new MRotorVertical(11,1));
-        rotorsAndReflectorsPanel.add(new MRotorVertical("ABCDEFGHIJKLMNOPQRSTUVWXYZ"));
+        rotorsAndReflectorsPanel = mRotors.addAll(rotorsAndReflectorsPanel);
 
         emulationPanel.add(rotorsAndReflectorsPanel);
         emulationPanel.add(inputPanel);
@@ -153,8 +162,8 @@ public class MFrameBuilder implements OnChangeListener, ActionListener {
     public void onChange(String text) {
         if(text==null || text.equals("") || text.equals("\n"))
             return;
-        rotorsAndReflectorsPanel.revalidate();
-        rotorsAndReflectorsPanel.repaint();
+        char last=text.charAt(text.length()-1);
+        mRotors.setDirection((last-'a')%26 + 1);
     }
 
     @Override

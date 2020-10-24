@@ -8,6 +8,10 @@ import javax.swing.event.DocumentListener;
 
 public class MInOut extends JTextField implements DocumentListener {
 
+    //TODO : MInOut builder class
+    //TODO : set max length
+    //TODO : input validation
+
     private OnChangeListener onChangeListener;
     private int id;
 
@@ -40,6 +44,7 @@ public class MInOut extends JTextField implements DocumentListener {
 
     @Override
     public void insertUpdate(DocumentEvent documentEvent) {
+        /*
         try{
             int x = Integer.parseInt(getText());
             if(x<1 || x>9){
@@ -50,6 +55,7 @@ public class MInOut extends JTextField implements DocumentListener {
             //setText("");
             return;
         }
+         */
         if(onChangeListener!=null){
             onChangeListener.onChange(getText());
             if(id!=0){
@@ -60,6 +66,7 @@ public class MInOut extends JTextField implements DocumentListener {
 
     @Override
     public void removeUpdate(DocumentEvent documentEvent) {
+        /*
         try{
             int x = Integer.parseInt(getText());
             if(x<1 || x>9){
@@ -70,6 +77,7 @@ public class MInOut extends JTextField implements DocumentListener {
             //setText("");
             return;
         }
+         */
         if(onChangeListener!=null){
             onChangeListener.onChange(getText());
             if(id!=0){
@@ -80,6 +88,7 @@ public class MInOut extends JTextField implements DocumentListener {
 
     @Override
     public void changedUpdate(DocumentEvent documentEvent) {
+        /*
         try{
             int x = Integer.parseInt(getText());
             if(x<1 || x>9){
@@ -90,6 +99,7 @@ public class MInOut extends JTextField implements DocumentListener {
             //setText("");
             return;
         }
+         */
         if(onChangeListener!=null){
             onChangeListener.onChange(getText());
             if(id!=0){
