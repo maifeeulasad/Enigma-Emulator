@@ -6,3 +6,6 @@ Enigma encryptor decryptor, implemented in Java(Swing)
 
 ## Decoding :
 ![encoding](https://github.com/maifeeulasad/Enigma-Emulator/blob/gh_pages/result/decoding.gif)
+
+
+Complete explaination in Bengali : https://www.youtube.com/watch?v=qXgNQYUsNkM
